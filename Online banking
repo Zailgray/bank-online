@@ -1,0 +1,262 @@
+import datetime
+import random
+def transaction(entry2, key):
+    size = len(entry2)-1
+    sorted = False
+    while not sorted:
+        sorted = True
+        for x in range(0, size):
+            if entry2[x][key] > entry2[x+1][key]:
+                sorted = False
+                entry2[x], entry2[x+1] = entry2[x+1], entry2[x]
+    return entry2
+
+entry2 = []          
+T = datetime.datetime.now()
+entry = []
+password = []
+ID = []
+wallet = []
+Withdrawed = []
+Deposited = []
+withHistory = []
+deHistory = []
+overall = 'Overall: '
+allwith = []
+def settings():
+    setting = input('[A] Developer\n[B] Personal-Account\n[C] Credits\n[D] About us\n[E] Back\nInput Data: ')
+    if setting.upper() == 'A':
+        base = input('[A] Data-Base\n[B] Company\n[C] Back\nInput Data: ')
+        if base.upper() == 'A':
+            print('!Only Programmers can acces Database!')
+            sec = input('Input Password: ')
+            if sec == 'Alabyu':
+                print('<--DataBase-->')
+                for b in range(len(entry)):
+                    entry3 = {'Name': entry[b], 'ID': ID[b]}
+                    entry2.append(entry3)
+                    print(entry3)
+                sort = input('Press Enter to sort(or "No" to go back):')
+                if sort.upper() == 'NO':
+                    all()
+                else:
+                    transaction(entry2,key='Name')
+                    for ent in entry2:
+                        print(ent)
+                    pr = input('Press Enter To back("No" to Stop):')
+                    if pr == 'No':
+                        print('Program Stopped')
+                    else:
+                        all()
+            else:
+                print('Invalid Password')
+        else:
+            all()
+            
+    elif setting.upper() == 'B':
+        print('Personal-Account')
+        for Id in range(len(entry)):
+            userID = int(input('Enter ID: '))
+            if userID == ID[Id]:
+                print('<--Privacy-->')
+                p = {'Name': entry[Id], 'Balance': wallet[Id]}
+                print(p)
+                sign = input('[A] Sign-in\n[B] Back\nWhat would you like to do: ')
+                if sign.upper() == 'A':
+                    sign_in()
+                elif sign.upper() == 'B':
+                    all()
+                else:
+                    print('invalid')
+            elif userID == ID[Id+1]:
+                print('<--Privacy-->')
+                p = {'Name': entry[Id+1], 'Balance': wallet[Id+1]}
+                print(p)
+                sign = input('[A] Sign-in\n[B] Back\nWhat would you like to do: ')
+                if sign.upper() == 'A':
+                    sign_in()
+                elif sign.upper() == 'B':
+                    all()
+                else:
+                    print('invalid')
+            else:
+                print('Invalid')
+    elif setting.upper() == 'E':
+        all()
+                             
+    else:
+        print('INVALID')
+
+def design():
+    print('=-=-=-=-=-=-=-=-=-=<>-=-=-=-=-=-=-=-=-=-')
+
+def sign_up():
+    print('Sign Up')
+    username = input('Enter Username: ')
+    password2 = input('Enter Password: ')
+    ID2 = random.randrange(10000,99999,3)
+    wallet2 = 0
+    withdrawed = 0
+    deposited = 0
+    return entry.append(username), password.append(password2), ID.append(ID2), wallet.append(wallet2), Deposited.append(deposited), Withdrawed.append(withdrawed)
+
+def deposit():
+    global wallet
+    global withdrawed
+    global deposited
+    for pitaka in range(len(entry)):
+        print(f'Balance: {wallet[pitaka]}')
+        dep = int(input('Input Amount: '))
+        deptrans = {'Name': entry, 'ID': ID[pitaka], 'Deposited': dep, 'Date-Time': T}
+        dep2 = wallet[pitaka] + dep
+        Deposited[pitaka] = dep2
+        deHistory.append(deptrans)
+        wallet[pitaka] = dep2
+        print(f'You Deposited: {dep}')
+        design()
+        ob = input('[A] OPTION\n[B] Log-out\nEnter option: ')
+        if ob.upper() == 'A':
+            op()
+        else:
+            all()
+            
+def withdraw():
+    global wallet
+    global withdrawed
+    global deposited
+    for wd in range(len(entry)):
+        w = int(input('Amount(Withdraw): '))
+        withTrans = {'Name': entry, 'ID': ID[wd], 'Withdrawed': w, 'Date-Time': T}
+        release = wallet[wd] - w
+        Withdrawed[wd] = release
+        withHistory.append(withTrans)
+        wallet[wd] = release
+        print('Withdraw Successfully!')
+        print(f'Balance: {wallet[wd]}')
+        design()
+        ob = input('[A] OPTION\n[B] Log-out\nEnter option: ')
+        if ob.upper() == 'A':
+            op()
+        else:
+            all()
+            
+def history():
+    global wallet,Withdrawed,Deposited,withdrawed,deposited,release,dep2
+    for his in range(len(entry)):
+        print(f'History =-=> {entry[his]}')
+        design()
+        print('Your Information-->')
+        trans = {'Name': entry[his], 'ID': ID[his], 'Balance': wallet[his], 'Date-Time': T}
+        for x in trans:
+            val = trans[x]
+            print(x,':',val)
+    design()
+    for adhis in range(len(entry)):
+        if Withdrawed[adhis] == 0 and Deposited[adhis] == 0:
+            print('<-----No History----->')
+        elif Withdrawed[adhis] > 0 or Deposited[adhis] > 0:
+            for tr in range(len(entry)):
+                trans2 = {'Overall': '-->','Balance': Withdrawed[tr]}
+                trans3 = {'Overall': '-->','Deposited': Deposited[tr]}
+                withHistory.append(trans2)
+                deHistory.append(trans3)
+                print('<-----Withdrawed----->')
+                for h in range(len(entry)):
+                    print(withHistory[h])
+                    design()
+                    print(trans2)
+                    design()
+                print('<-----Deposited----->')
+                for d in range(len(entry)):
+                    print(deHistory[d])
+                    design()
+                    print(trans3)
+                    design()
+        else:
+            for tr in range(len(entry)):
+                
+                trans2 = {'Overall': '-->','Withdrawed': Withdrawed[adhis], 'Date-Time': T}
+                trans3 = {'Overall': '-->','Deposited': Deposited[adhis], 'Date-Time': T}
+                withHistory.append(trans2)
+                deHistory.append(trans3)
+                print('<--Withdrawed-->')
+                for h in range(len(withHistory)):
+                    print(withHistory[h])
+                    design()
+                print('<--Deposited-->')
+                for d in range(len(deHistory)):
+                    print(deHistory[d])
+    ob = input('[A] OPTION\n[B] Log-out\nEnter option: ')
+    if ob.upper() == 'A':
+        op()
+    else:
+        all()
+            
+def balance():
+    global wallet
+    for bal in range(len(entry)):
+        print(f'Balance: {wallet[bal]}')
+        design()
+        ob = input('[A] OPTION\n[B] Log-out\nEnter option: ')
+        if ob.upper() == 'A':
+            op()
+        else:
+            all()
+        
+def op():
+    user = input('[A] Deposit\n[B] Withdraw\n[C] Balance\n[D] History\n[E] Log-out\nEnter Transaction: ')
+    if user.upper() == 'A':
+        deposit()
+    elif user.upper() == 'C':
+        balance()
+    elif user.upper() == 'B':
+        withdraw()
+    elif user.upper() == 'D':
+        history()
+    elif user.upper() == 'E':
+        all()
+    else:
+        print('<--!Invalid Option!-->')        
+
+def sign_in():
+    global balance
+    print('Sign In')
+    while True:
+        username = input('Enter Username: ')
+        password2 = input('Enter Password: ')
+        for i in range(len(entry)):
+            if username == entry[i] and password2 == password[i]:
+                print(f'ID: {ID[i]}')
+                print(f'Welcome {entry[i]}')
+                op()
+            elif username == entry[i+1] and password2 == password[i+1]:
+                print(f'ID: {ID[i]}')
+                print(f'Welcome {entry[i]}')
+                op()
+            else:
+                print('Processing....(Within 5 second without result which means ERROR)')    
+    
+
+   
+            
+def all():
+   data = input('[A] Sign Up\n[B] Sign In\n[C] Stop\n[D] Settings\nEnter Data: ')
+   if data.upper() == 'A': 
+        sign_up()
+        sign = input('[A] Sign-in\n[B] Back\nWhat would you like to do: ')
+        if sign.upper() == 'A':
+            sign_in()
+        elif sign.upper() == 'B':
+            all()
+        else:
+            print('invalid')
+   elif data.upper() == 'B':
+       sign_in()
+   elif data.upper() == 'D':
+       settings()
+   else:
+        print('<---Program Stop--->')
+
+all()
+
+    
